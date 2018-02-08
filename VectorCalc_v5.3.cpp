@@ -3,6 +3,7 @@
 //  VectorCalc4
 //
 //  Created by Kiran Digavalli on 30/1/18.
+//  Co-authored by Nick Nusgart
 //  Copyright (c) 2018 Midwest Aerospace Workshop. All rights reserved.
 //
 //  Version notes: v1 was a crappy cross-p calculator written in python one rainy day. v2 was in c++, v3
@@ -27,58 +28,45 @@
 
 using namespace std;
 
+//represents a vector (three-dimensional)
 struct vector {
     double i;
     double j;
     double k;
 };
 
+//values herein contained used in the calculation of the angle between two vectors
+struct magnitudes {  
+    double a;
+    double b;
+    double cross;
+};
+
 double dot(struct vector v, struct vector w){
    return v.i * w.i + v.j * w.j + v.k * w.k;
-}
-
-double DotF (double a, double b, double c, double d, double e, double f){
-    double dP = 0;
-    dP = a * d + b * e + c * f;
-    return dP;
 }
 
 double magnitude(struct vector v){
   return sqrt(dot(v,v));
 }
 
-double MagF (double a, double b, double c){
-    double Vmag = 0;
-    Vmag = sqrt(pow(a,2) + pow(b,2) + pow(c,2));
-    return Vmag;
-}
-
-double CrossF(double p, double q, double m, double n){
-    double cross = 0;
-    cross = p * q - m * n;
-    return cross;
-}
-
 struct vector cross(struct vector v, struct vector w){
   return (struct vector){v.j * w.k - v.k * w.j , v.k * w.i - v.i * w.k, v.i * w.j - v.j * w.i };
 }
 
-struct magnitudes {
-    double a;
-    double b;
-    double cross;
-} mag;
 
 int main() {
     //declare variables
     //note: most of the data is stored in the two structs before int main()
     
-    double dotp;
+    double dotp = 0;
     
-    double scalM;
+    double scalM = 0;
     
     double thetaRad = 0;
     
+	struct magnitudes mag = {};
+	
     struct vector first ={};
     struct vector sec = {};
     struct vector out = {};
@@ -90,7 +78,7 @@ int main() {
     string which3 = "3";
     string which4 = "4";
     
-    char cycle = '0';
+    char cycle = 'N';
     
     //General info for the user
     
@@ -100,7 +88,9 @@ int main() {
 
     
     do{
-	    cin.clear(); //input clearing
+	    
+		//input clearing
+		cin.clear(); 
 		
 	    //which computation does the user require?
 	    cout<< "Which calculation would you like to perform? For cross-product enter 1; for dot-product enter 2; for scalar multiplication enter 3; for the angle between two vectors enter 4" <<endl;
@@ -144,16 +134,10 @@ int main() {
 	    }
     
 	    //calculate cross product using the CrossF function
-    	    out = cross(first, sec);
-    	    #if 0
-	    out.i = CrossF(first.j, sec.k, first.k, sec.j);
-	    out.j = CrossF(first.k, sec.i, first.i, sec.k);       //for some reason, the correct order of arguments for the j component
-	    out.k = CrossF(first.i, sec.j, first.j, sec.i);       // produces a negative result, so I flipped it
-    	    #endif 
-
+    	out = cross(first, sec);
+    	    
 	    //calculate dot product using the DotF function
-	    //dotp = DotF(first.i, first.j, first.k, sec.i, sec.j, sec.k);
-    	    dotp = dot(first, sec);
+    	dotp = dot(first, sec);
 
 	    //calculate scalar multiple
 	    scal.i = scalM * first.i;
@@ -164,11 +148,7 @@ int main() {
 	    mag.a = magnitude(first);
 	    mag.b = magnitude(sec);
 	    mag.cross = magnitude(out);
-	    #if 0
-	    mag.a = MagF(first.i, first.j, first.k);
-	    mag.b = MagF(sec.i, sec.j, sec.k);
-	    mag.cross = MagF(out.i, out.j, out.k);
-    	    #endif
+	    
 	    //calculate angle between vectors
 	    thetaRad = asin(mag.cross / (mag.a * mag.b));
     
@@ -190,8 +170,13 @@ int main() {
 	        cout << "ayy lmao"<<endl;
 	    }
     
-            cout << "Do you wish to perform another calcuation? (Y or N)" <<endl;
+        cout << "Do you wish to perform another calcuation? (Y or N)" <<endl;
 	    cin >> cycle;
+		
+		//input clearing
+		cin.clear();
+		string ignore; 
+		getline(cin,ignore);
 		
     } while (cycle == 'y' || cycle == 'Y');
     //system("pause");  <--- commented out here, but necessary in visual studio/windoge
