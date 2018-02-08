@@ -27,10 +27,24 @@
 
 using namespace std;
 
+struct vector {
+    double i;
+    double j;
+    double k;
+};
+
+double dot(struct vector v, struct vector w){
+   return v.i * w.i + v.j * w.j + v.k * w.k;
+}
+
 double DotF (double a, double b, double c, double d, double e, double f){
     double dP = 0;
     dP = a * d + b * e + c * f;
     return dP;
+}
+
+double magnitude(struct vector v){
+  return sqrt(dot(v,v));
 }
 
 double MagF (double a, double b, double c){
@@ -45,11 +59,9 @@ double CrossF(double p, double q, double m, double n){
     return cross;
 }
 
-struct vectors {
-    double i;
-    double j;
-    double k;
-} first, sec, out, scal;
+struct vector cross(struct vector v, struct vector w){
+  return (struct vector){v.j * w.k - v.k * w.j , v.k * w.i - v.i * w.k, v.i * w.j - v.j * w.i };
+}
 
 struct magnitudes {
     double a;
@@ -57,9 +69,7 @@ struct magnitudes {
     double cross;
 } mag;
 
-int main()
-
-{
+int main() {
     //declare variables
     //note: most of the data is stored in the two structs before int main()
     
@@ -69,13 +79,18 @@ int main()
     
     double thetaRad = 0;
     
+    struct vector first ={};
+    struct vector sec = {};
+    struct vector out = {};
+    struct vector scal = {};
+    
     string whichCalc = "0";
     string which1 = "1";
     string which2 = "2";
     string which3 = "3";
     string which4 = "4";
     
-	char cycle = '0';
+    char cycle = '0';
     
     //General info for the user
     
@@ -85,15 +100,12 @@ int main()
 
     
     do{
-		
-		cin.clear(); //input clearing
+	    cin.clear(); //input clearing
 		
 	    //which computation does the user require?
-    	
 	    cout<< "Which calculation would you like to perform? For cross-product enter 1; for dot-product enter 2; for scalar multiplication enter 3; for the angle between two vectors enter 4" <<endl;
     
 	    //error trapping
-    
 	    while(1){                                              //catching invalid selections with a while loop
 	        getline(cin,whichCalc);                            //The (1) is always true for the while loop
 	        if(whichCalc == which1 || whichCalc == which2 || whichCalc == which3 || whichCalc == which4){
@@ -104,7 +116,6 @@ int main()
 	    }
     
 	    //request & receive inputs
-    
 	    if(whichCalc==which3){
 	        cout << "enter scalar muliplier" <<endl;
 	        cin >> scalM;
@@ -133,33 +144,35 @@ int main()
 	    }
     
 	    //calculate cross product using the CrossF function
-    
+    	    out = cross(first, sec);
+    	    #if 0
 	    out.i = CrossF(first.j, sec.k, first.k, sec.j);
 	    out.j = CrossF(first.k, sec.i, first.i, sec.k);       //for some reason, the correct order of arguments for the j component
 	    out.k = CrossF(first.i, sec.j, first.j, sec.i);       // produces a negative result, so I flipped it
-    
+    	    #endif 
+
 	    //calculate dot product using the DotF function
-    
-	    dotp = DotF(first.i, first.j, first.k, sec.i, sec.j, sec.k);
-    
+	    //dotp = DotF(first.i, first.j, first.k, sec.i, sec.j, sec.k);
+    	    dotp = dot(first, sec);
+
 	    //calculate scalar multiple
-    
 	    scal.i = scalM * first.i;
 	    scal.j = scalM * first.j;
 	    scal.k = scalM * first.k;
     
 	    //generate the magnitudes of the vectors using MagF
-    
+	    mag.a = magnitude(first);
+	    mag.b = magnitude(sec);
+	    mag.cross = magnitude(out);
+	    #if 0
 	    mag.a = MagF(first.i, first.j, first.k);
 	    mag.b = MagF(sec.i, sec.j, sec.k);
 	    mag.cross = MagF(out.i, out.j, out.k);
-    
+    	    #endif
 	    //calculate angle between vectors
-    
 	    thetaRad = asin(mag.cross / (mag.a * mag.b));
     
 	    //output the requested result according to the value of whichCalc
-    
 	    if(whichCalc==which1){
 	        cout << "The cross-product you requested is: <" <<out.i<< "," <<out.j<< "," <<out.k<< ">" <<endl;
 	    } else if(whichCalc==which2){
@@ -171,22 +184,16 @@ int main()
 	    } else {
 	        cout << "Error 1" <<endl;
 	    }
-    
+
 	    //easter egg
-    
 	    if(whichCalc==which2 && dotp==42){
 	        cout << "ayy lmao"<<endl;
 	    }
     
-		cout << "Do you wish to perform another calcuation? (Y or N)" <<endl;
-		cin >> cycle;
+            cout << "Do you wish to perform another calcuation? (Y or N)" <<endl;
+	    cin >> cycle;
 		
     } while (cycle == 'y' || cycle == 'Y');
-	
-	
     //system("pause");  <--- commented out here, but necessary in visual studio/windoge
-    
     return 0;
 }
-
-
