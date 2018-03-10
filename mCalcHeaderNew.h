@@ -11,7 +11,6 @@
 
 #ifndef MatrixCalc_mCalcHeaderNew_h
 #define MatrixCalc_mCalcHeaderNew_h
-#endif
 
 #include <iostream>
 #include <iomanip>
@@ -360,4 +359,6 @@ double analyzeF_2x2(bool solvedFlag, bool block3Flag, bool linFlag, double matri
     
     return 0;
 }
+
+#endif
 
