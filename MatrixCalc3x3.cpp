@@ -85,9 +85,20 @@ int main(){
     bool flag3 = false;
     bool flag4 = false;
     bool flag5 = false;
+    char intFlag = 'N';
+    
+    //non-integer entries?
+    cout << "Non integer entries? (Y or N)" <<endl;
+    cin >> intFlag;
     
     //read in data
     readData(matrix);
+    
+    //set output precision if non integer entries
+    if(intFlag == 'Y' || intFlag == 'y'){
+        cout.setf(ios::fixed);
+        cout.precision(1);
+    }
     
     //check data
     cout << "\nEntry:" <<endl;
