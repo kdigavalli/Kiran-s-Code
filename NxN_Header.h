@@ -51,7 +51,7 @@ void copyF_NxN(int N, double *mat1[N], double *mat2[N]){
     }
 }
 
-//copy the values of mat1 into mat1
+//copy the values of dynamic array mat1 into static array mat2
 void copyF_dyn(int N, double *mat1[N], double mat2[2][2]){
     
     for(int i=0; i<=1; i++){
@@ -139,7 +139,7 @@ void subMatrixCopy_NxN(int N, double *mat1[N], double *mat2[N-1]){
     }
 }
 
-// NxN analysis function, down to 2x2
+// NxN analysis function
 void analyzeF_NxN(int N, bool block6flag, double *matrix1[N], double *matrix2[N]){
     
     //sum of all components and sum along the main diagonal
@@ -256,6 +256,7 @@ void analyzeF_NxN(int N, bool block6flag, double *matrix1[N], double *matrix2[N]
 
 
 //recursive function to create progressively smaller submatrices and row reduce them
+//stops after a 2x2 submatrix is created
 void arrayFunctionThing(int N, bool flag1, bool flag2, double *matrix1[N], double *matrix2[N], double matrix_2x2[2][2]){
     
     //reset flag2 and dimension

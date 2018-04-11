@@ -18,7 +18,7 @@ using namespace std;
 
 int main(){
     
-    //initialize dimension variables
+    //initialize dimension variable
     int N = 0;
     
     //initialize flags
