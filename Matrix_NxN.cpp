@@ -4,7 +4,7 @@
 //
 //  Created by Kiran Digavalli on 8/4/18.
 //  Copyright (c) 2018 Midwest Aerospace Workshop. All rights reserved.
-//
+//  You need NewMatrixHeader.h and NxN_Header.h to run this
 
 #include <iostream>
 #include <iomanip>
