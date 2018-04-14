@@ -11,7 +11,6 @@
 
 using namespace std;
 
-
 class rectangle{
     
 private:
@@ -67,7 +66,6 @@ public:
         }
     }
 };
-
 
 
 int main(){
