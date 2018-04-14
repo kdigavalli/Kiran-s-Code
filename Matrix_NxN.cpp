@@ -43,7 +43,7 @@ int main(){
         matrix2[i] = new double[N];
     }
     
-    //initialize static 2x2 arrays
+    //initialize 2x2 arrays
     double matrix_2x2[2][2];
     double mirror_2x2[2][2];
     
