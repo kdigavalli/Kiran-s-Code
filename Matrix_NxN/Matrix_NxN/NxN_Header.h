@@ -51,7 +51,7 @@ void copyF_NxN(int N, double *mat1[N], double *mat2[N]){
     }
 }
 
-//copy the values of dynamic array mat1 into static array mat2
+//copy the values of dynamic array mat1 into normal array mat2
 void copyF_dyn(int N, double *mat1[N], double mat2[2][2]){
     
     for(int i=0; i<=1; i++){
@@ -95,7 +95,7 @@ void lineSwap_NxN(int N, int line1, int line2, double *mat1[N], double *mat2[N])
     checkData_NxN(N, mat1);
 }
 
-//gives the scalar multiple of a particular row for 3x3 matrices
+//gives the scalar multiple of a particular row for NxN matrices
 double scalM_NxN(int N, double mult, int row, double *mat1[N]){
     
     if(fabs(row)>=N){
@@ -143,8 +143,8 @@ void subMatrixCopy_NxN(int N, double *mat1[N], double *mat2[N-1]){
 void analyzeF_NxN(int N, bool block6flag, double *matrix1[N], double *matrix2[N]){
     
     //sum of all components and sum along the main diagonal
-    int fullSum = matrixSum(N, matrix1);
-    int diaSum = diagonalSum(N, matrix1);
+    double fullSum = matrixSum(N, matrix1);
+    double diaSum = diagonalSum(N, matrix1);
     
     //initialize flags
     bool pivot1Flag = false;
@@ -266,36 +266,34 @@ void arrayFunctionThing(int N, bool flag1, bool flag2, double *matrix1[N], doubl
     //tracking
     cout << "Array function call for dimension: " << dimension-1 << "\n" <<endl;
     
-    while (dimension > 2){
-        
-        //decrement the matrix dimension
-        dimension--;
-        
-        //create new dynamic arrays
-        double **mat1;
-        double **mat2;
-        mat1 = new double *[dimension];
-        mat2 = new double *[dimension];
-        
-        for(int i=0; i<dimension; i++){
-            mat1[i] = new double[dimension];
-            mat2[i] = new double[dimension];
-        }
-
-        //copy the next submatrix into mat1
-        subMatrixCopy_NxN(N, matrix1, mat1);
-        
-        //copy into the mirror
-        copyF_NxN(dimension, mat1, mat2);
-        
-        // analysis function call
-        analyzeF_NxN(dimension,flag2, mat1, mat2);
-
-        //recursive step
-        if(dimension > 3){
-            arrayFunctionThing(dimension, flag1, flag2, mat1, mat2, matrix_2x2);
-        }
+    //decrement the matrix dimension
+    dimension--;
+    
+    //create new dynamic arrays
+    double **mat1;
+    double **mat2;
+    mat1 = new double *[dimension];
+    mat2 = new double *[dimension];
+    
+    for(int i=0; i<dimension; i++){
+        mat1[i] = new double[dimension];
+        mat2[i] = new double[dimension];
     }
+    
+    //copy the next submatrix into mat1
+    subMatrixCopy_NxN(N, matrix1, mat1);
+    
+    //copy into the mirror
+    copyF_NxN(dimension, mat1, mat2);
+    
+    // analysis function call
+    analyzeF_NxN(dimension,flag2, mat1, mat2);
+    
+    //recursive step
+    if(dimension > 2){
+        arrayFunctionThing(dimension, flag1, flag2, mat1, mat2, matrix_2x2);
+    }
+
     
     //if dimension is 2, copy matrix1 into a static 2x2 array for analysis
     if(dimension == 2){
