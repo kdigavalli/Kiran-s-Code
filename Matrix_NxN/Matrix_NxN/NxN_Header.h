@@ -10,6 +10,8 @@
 #define Matrix_NxN_NxN_Header_h
 
 #include <iostream>
+#include <stdio.h>
+#include <ctime>
 #include <iomanip>
 #include <cmath>
 #include <cstdlib>
@@ -81,6 +83,20 @@ double matrixSum(int N, double *mat1[N]){
         }
     }
     return sum;
+}
+
+void decimalCheck(int N, double *mat1[N]){
+    double temp = 0;
+    
+    cout << "Enter NxN matrix separated by spaces\n"  <<endl;
+    for(int i=0; i<N; i++){
+        for(int j=0; j<N; j++){
+            if(modf(mat1[i][j], &temp) != 0){
+                cout.setf(ios::fixed);
+                cout.precision(1);
+            }
+        }
+    }
 }
 
 //swaps lines line1 and line2 for NxN arrays
@@ -289,6 +305,9 @@ void arrayFunctionThing(int N, bool flag1, bool flag2, double *matrix1[N], doubl
     // analysis function call
     analyzeF_NxN(dimension,flag2, mat1, mat2);
     
+    //if decimals are present, set output precision to 1
+    decimalCheck(dimension, mat1);
+    
     //recursive step
     if(dimension > 2){
         arrayFunctionThing(dimension, flag1, flag2, mat1, mat2, matrix_2x2);
@@ -301,6 +320,99 @@ void arrayFunctionThing(int N, bool flag1, bool flag2, double *matrix1[N], doubl
     }
     
 }
+
+class randomMatrix{
+    
+private:
+    
+    int dimension;
+    int randCap;
+    int randSign;
+    
+public:
+    
+    randomMatrix(){
+        dimension = 0;
+        randCap = 0;
+        randSign = 0;
+    }
+    
+    randomMatrix(int N){
+        dimension = N;
+        randCap = 0;
+        randSign = 0;
+    }
+    
+    void setDims(){
+        printf("Enter dimension\n");
+        scanf("%d", &dimension);
+        
+    }
+    
+    void setCap(){
+        printf("Enter cap\n");
+        scanf("%d", &randCap);
+    }
+    
+    void checkData_NxN(int N, double *mat1[N]){
+        
+        cout << "" <<endl;
+        for(int i=0; i<N; i++){
+            for(int j=0; j<N; j++){
+                cout << mat1[i][j] << " ";
+            }
+            cout <<endl;
+        }
+        cout << "" <<endl;
+    }
+    
+    void tallySigns(int N, double *mat1[N]){
+        int posTally = 0;
+        int zeroTally = 0;
+        int negTally = 0;
+        
+        for(int i=0; i<N; i++){
+            for(int j=0; j<N; j++){
+                if(mat1[i][j] > 0){
+                    posTally++;
+                }else if(mat1[i][j] == 0){
+                    zeroTally++;
+                } else{
+                    negTally++;
+                }
+            }
+        }
+        printf("There are %d positive numbers,\n%d zeros, \nand %d negative numbers in this matrix\n\n", posTally, zeroTally, negTally);
+    }
+    
+    void doStuff(){
+        srand(time(NULL));
+        
+        double **matrix;
+        matrix = new double *[dimension];
+        for(int i=0; i<dimension; i++){
+            matrix[i] = new double[dimension];
+        }
+        
+        for(int i=0; i<dimension; i++){
+            for(int j=0; j<dimension; j++){
+                randSign = rand() % 10;
+                if(randSign>3){
+                    matrix[i][j] = rand() % randCap;
+                } else {
+                    matrix[i][j] = -(rand() % randCap);
+                }
+            }
+        }
+        
+        checkData_NxN(dimension, matrix);
+        
+        tallySigns(dimension, matrix);
+        
+    }
+    
+};
+
 
 
 #endif

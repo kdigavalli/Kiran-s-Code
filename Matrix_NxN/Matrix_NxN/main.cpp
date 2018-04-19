@@ -27,7 +27,9 @@ int main(){
     bool flag3 = false;
     bool flag4 = false;
     bool flag5 = false;
+    bool flag6 = false;
     char intFlag = 'N';
+    
     
     //request & receive dimension from user
     cout << "For an NxN matrix, enter N" <<endl;
@@ -41,6 +43,16 @@ int main(){
     if(intFlag == 'Y' || intFlag == 'y'){
         cout.setf(ios::fixed);
         cout.precision(1);
+    }
+    
+    cout << "Would you like a random matrix? (0 or 1)" <<endl;
+    cin >> flag6;
+    
+    //generate random matrix if requested
+    if(flag6){
+        randomMatrix newMatrix(N);
+        newMatrix.setCap();
+        newMatrix.doStuff();
     }
     
     //initialize dynamic 2D arrays
