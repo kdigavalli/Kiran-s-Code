@@ -328,32 +328,41 @@ private:
     int dimension;
     int randCap;
     int randSign;
+    int mix;
     
 public:
     
+    //constructors
     randomMatrix(){
         dimension = 0;
         randCap = 0;
         randSign = 0;
+        mix = 5;
     }
-    
     randomMatrix(int N){
         dimension = N;
         randCap = 0;
         randSign = 0;
+        mix = 5;
     }
     
+    //setters
     void setDims(){
         printf("Enter dimension\n");
         scanf("%d", &dimension);
         
     }
-    
     void setCap(){
         printf("Enter cap\n");
         scanf("%d", &randCap);
     }
+    void setMix(){
+        printf("Enter mix (0 to 10)\n");
+        scanf("%d", &mix);
+
+    }
     
+    //output data
     void checkData_NxN(int N, double *mat1[N]){
         
         cout << "" <<endl;
@@ -366,6 +375,7 @@ public:
         cout << "" <<endl;
     }
     
+    //create tally of positives, negatives, and zeros
     void tallySigns(int N, double *mat1[N]){
         int posTally = 0;
         int zeroTally = 0;
@@ -382,22 +392,28 @@ public:
                 }
             }
         }
-        printf("There are %d positive numbers,\n%d zeros, \nand %d negative numbers in this matrix\n\n", posTally, zeroTally, negTally);
+        printf("There are %d positive numbers,\n%d zeros, and %d negative numbers in this matrix\n\n", posTally, zeroTally, negTally);
     }
     
+    //actually do stuff
     void doStuff(){
+        
+        // seed random
         srand(time(NULL));
         
+        //create dynamic 2d array
         double **matrix;
         matrix = new double *[dimension];
         for(int i=0; i<dimension; i++){
             matrix[i] = new double[dimension];
         }
         
+        // populate array with random numbers
+        // randCap is the maximum absolute value, and mix determines the ratio of positive to negative numbers
         for(int i=0; i<dimension; i++){
             for(int j=0; j<dimension; j++){
                 randSign = rand() % 10;
-                if(randSign>3){
+                if(randSign > mix){
                     matrix[i][j] = rand() % randCap;
                 } else {
                     matrix[i][j] = -(rand() % randCap);
@@ -405,13 +421,24 @@ public:
             }
         }
         
+        //output matrix and tally
         checkData_NxN(dimension, matrix);
-        
         tallySigns(dimension, matrix);
-        
     }
     
+    
+    void matrixTransfer(int N, double *mat1[N], double *mat2[N]){
+        for(int i=0; i<N; i++){
+            for(int j=0; j<N; j++){
+                mat2[i][j] = mat1[i][j];
+            }
+        }
+    }
+    
+    
 };
+
+
 
 
 

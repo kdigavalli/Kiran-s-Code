@@ -30,7 +30,6 @@ int main(){
     bool flag6 = false;
     char intFlag = 'N';
     
-    
     //request & receive dimension from user
     cout << "For an NxN matrix, enter N" <<endl;
     cin >> N;
@@ -45,13 +44,14 @@ int main(){
         cout.precision(1);
     }
     
+    //generate random matrix if requested
     cout << "Would you like a random matrix? (0 or 1)" <<endl;
     cin >> flag6;
     
-    //generate random matrix if requested
     if(flag6){
         randomMatrix newMatrix(N);
         newMatrix.setCap();
+        newMatrix.setMix();
         newMatrix.doStuff();
     }
     
