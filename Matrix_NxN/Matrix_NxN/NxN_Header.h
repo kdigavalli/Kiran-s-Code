@@ -86,21 +86,31 @@ double matrixSum(int N, double *mat1[N]){
 }
 
 void decimalCheck(int N, double *mat1[N]){
-    double temp = 0;
     
-    cout << "Enter NxN matrix separated by spaces\n"  <<endl;
+    double temp = 0;
     for(int i=0; i<N; i++){
         for(int j=0; j<N; j++){
-            if(modf(mat1[i][j], &temp) != 0){
+            if(modf(mat1[i][j], &temp) != 0 && modf(mat1[i][j], &temp) != -0){
                 cout.setf(ios::fixed);
                 cout.precision(1);
+                break;
+            }
+        }
+    }
+}
+
+void negativeZeroCheck(int N, double *mat1[N]){
+    for(int i=0; i<N; i++){
+        for(int j=0; j<N; j++){
+            if(mat1[i][j] == -0){
+                mat1[i][j] = -mat1[i][j];
             }
         }
     }
 }
 
 //swaps lines line1 and line2 for NxN arrays
-void lineSwap_NxN(int N, int line1, int line2, double *mat1[N], double *mat2[N]){
+void lineSwap_NxN(int N, int offset, int line1, int line2, double *mat1[N], double *mat2[N]){
     
     //method to swap lines
     for(int i=0; i<N; i++){
@@ -112,7 +122,7 @@ void lineSwap_NxN(int N, int line1, int line2, double *mat1[N], double *mat2[N])
 }
 
 //gives the scalar multiple of a particular row for NxN matrices
-double scalM_NxN(int N, double mult, int row, double *mat1[N]){
+double scalM_NxN(int N, int offset, double mult, int row, double *mat1[N]){
     
     if(fabs(row)>=N){
         cout << "\nScalM error" <<endl;
@@ -129,7 +139,7 @@ double scalM_NxN(int N, double mult, int row, double *mat1[N]){
 }
 
 //replaces a row with the sum of itself and the scalar multiple of another row for NxN matrices
-double replaceF_NxN(int N, double mult, int replaceRow, int multRow, double *mat1[N], double *mat2[N]){
+double replaceF_NxN(int N, int offset, double mult, int replaceRow, int multRow, double *mat1[N], double *mat2[N]){
     
     if(fabs(replaceRow) >= N || fabs(multRow) >= N){
         cout << "\nReplaceF error" <<endl;
@@ -156,7 +166,7 @@ void subMatrixCopy_NxN(int N, double *mat1[N], double *mat2[N-1]){
 }
 
 // NxN analysis function
-void analyzeF_NxN(int N, bool block6flag, double *matrix1[N], double *matrix2[N]){
+void analyzeF_NxN(int N, int offset, bool block6flag, double *matrix1[N], double *matrix2[N]){
     
     //sum of all components and sum along the main diagonal
     double fullSum = matrixSum(N, matrix1);
@@ -178,10 +188,10 @@ void analyzeF_NxN(int N, bool block6flag, double *matrix1[N], double *matrix2[N]
     } else{
         
         //if there is a linear dependency between any two rows, the row is converted to zeros
-        for(row=0; row<N; row++){
-            for(compare=0; compare<N; compare++){
-                ratio = matrix1[row][0]/matrix1[compare][0];
-                for(int element=0; element<N; element++){
+        for(row=offset; row<N; row++){
+            for(compare=offset; compare<N; compare++){
+                ratio = matrix1[row][offset]/matrix1[compare][offset];
+                for(int element=offset; element<N; element++){
                     if((row!=compare) && (matrix1[row][element]/matrix1[compare][element]) == ratio){
                         flag2 = true;
                         continue;
@@ -196,7 +206,7 @@ void analyzeF_NxN(int N, bool block6flag, double *matrix1[N], double *matrix2[N]
                 }
             }
             if(flag2 == true){
-                replaceF_NxN(N, -ratio, row, compare, matrix1, matrix2);
+                replaceF_NxN(N, offset, -ratio, row, compare, matrix1, matrix2);
                 cout << "Linear dependency present" << endl;
                 break;
             }
@@ -204,10 +214,10 @@ void analyzeF_NxN(int N, bool block6flag, double *matrix1[N], double *matrix2[N]
         
         //if a row begins with zero and this operation has not yet been performed, the row is swapped with the last row
         if(!flag3 && !((fullSum==diaSum) && (diaSum == N))){
-            for(int p=0; p<N; p++){
-                if(matrix1[p][0] == 0){
+            for(int p=offset; p<N; p++){
+                if(matrix1[p][offset] == 0){
                     cout << "Block 2" <<endl;
-                    lineSwap_NxN(N, p, N-1, matrix1, matrix2);
+                    lineSwap_NxN(N, offset, p, N-1, matrix1, matrix2);
                     flag3 = true;
                     break;
                 }
@@ -216,11 +226,14 @@ void analyzeF_NxN(int N, bool block6flag, double *matrix1[N], double *matrix2[N]
         
         //if a row begins with a 1, it is swapped with the first row
         if(!pivot1Flag){
-            for(int k=0; k<N; k++){
-                if(matrix1[k][0] == 1){
+            for(int k=offset; k<N; k++){
+                if(matrix1[k][offset] == 1 && !pivot1Flag){
                     cout << "Block 3" <<endl;
-                    lineSwap_NxN(N, 0, k, matrix1, matrix2);
+                    lineSwap_NxN(N, offset, offset, k, matrix1, matrix2);
                     pivot1Flag = true;
+                    break;
+                }
+                if(pivot1Flag){
                     break;
                 }
             }
@@ -228,11 +241,11 @@ void analyzeF_NxN(int N, bool block6flag, double *matrix1[N], double *matrix2[N]
         
         //if a a 1 can be produced by row replacement, it is done
         if(!pivot1Flag){
-            for (int j=1; j<N; j++){
+            for (int j=offset+1; j<N; j++){
                 for (int l=-9; l<10; l++){
-                    if(l * matrix1[j][0] + matrix1[0][0] == 1){
+                    if(l * matrix1[j][offset] + matrix1[offset][offset] == 1){
                         cout << "Block 4" <<endl;
-                        replaceF_NxN(N, l, 0, j, matrix1, matrix2);
+                        replaceF_NxN(N, offset, l, offset, j, matrix1, matrix2);
                         copyF_NxN(N, matrix2, matrix1);
                         pivot1Flag = true;
                         break;
@@ -242,22 +255,22 @@ void analyzeF_NxN(int N, bool block6flag, double *matrix1[N], double *matrix2[N]
         }
         
         //if all else fails, brute force approach; mess will result
-        if(!pivot1Flag && ((matrix1[1][0]) != 0) && (matrix1[0][0] != 1) && !block6flag){
+        if(!pivot1Flag && ((matrix1[offset+1][offset]) != 0) && (matrix1[offset][offset] != 1) && !block6flag){
             cout << "Block 5" <<endl;
             checkData_NxN(N, matrix1);
-            scalM_NxN(N, 1/matrix1[0][0], 0, matrix1);
+            scalM_NxN(N, offset, 1/matrix1[offset][offset], offset, matrix1);
             copyF_NxN(N, matrix1, matrix2);
             checkData_NxN(N, matrix1);
             pivot1Flag = true;
         }
         
         //after getting a 1 in the pivot position, we obtain zeros under it
-        if((fabs(matrix1[1][0]) > 0) && !block6flag){
-            for(int d=1; d<N; d++){
-                if(matrix1[d][0] != 0 && matrix1[d][0] != 1){
+        if((fabs(matrix1[offset+1][offset]) > 0) && !block6flag){
+            for(int d=offset+1; d<N; d++){
+                if(matrix1[d][offset] != 0 && matrix1[d][offset] != 1){
                     cout << "Block 6" <<endl;
                     checkData_NxN(N, matrix1);
-                    replaceF_NxN(N, -matrix1[d][0], d, 0, matrix1, matrix2);
+                    replaceF_NxN(N, offset, -matrix1[d][offset], d, offset, matrix1, matrix2);
                     block6flag = true;
                 }
             }
@@ -271,52 +284,31 @@ void analyzeF_NxN(int N, bool block6flag, double *matrix1[N], double *matrix2[N]
 }
 
 
-//recursive function to create progressively smaller submatrices and row reduce them
-//stops when the 2x2 submatrix is created
-void arrayFunctionThing(int N, bool flag1, bool flag2, double *matrix1[N], double *matrix2[N], double matrix_2x2[2][2]){
+//recursive function to analyze the matrix with progressively larger offset
+void arrayFunctionThing(int N, int offset, bool flag1, bool flag2, double *mat1[N], double *mat2[N], double matrix_2x2[2][2]){
     
     //reset flag2 and dimension
     flag2 = false;
     int dimension = N;
     
     //tracking
-    cout << "Array function call for dimension: " << dimension-1 << "\n" <<endl;
-    
-    //decrement the matrix dimension
-    dimension--;
-    
-    //create new dynamic arrays
-    double **mat1;
-    double **mat2;
-    mat1 = new double *[dimension];
-    mat2 = new double *[dimension];
-    
-    for(int i=0; i<dimension; i++){
-        mat1[i] = new double[dimension];
-        mat2[i] = new double[dimension];
-    }
-    
-    //copy the next submatrix into mat1
-    subMatrixCopy_NxN(N, matrix1, mat1);
+    cout << "Array function call for offset: " << offset << "\n" <<endl;
     
     //copy into the mirror
     copyF_NxN(dimension, mat1, mat2);
     
-    // analysis function call
-    analyzeF_NxN(dimension,flag2, mat1, mat2);
-    
     //if decimals are present, set output precision to 1
-    decimalCheck(dimension, mat1);
+    decimalCheck(N, mat2);
+    
+    // analysis function call
+    analyzeF_NxN(dimension, offset, flag2, mat1, mat2);
+    
+    //increment offset
+    offset++;
     
     //recursive step
-    if(dimension > 2){
-        arrayFunctionThing(dimension, flag1, flag2, mat1, mat2, matrix_2x2);
-    }
-
-    
-    //if dimension is 2, copy matrix1 into a static 2x2 array for analysis
-    if(dimension == 2){
-        copyF_dyn(dimension, matrix1, matrix_2x2);
+    if(offset < N-1){
+        arrayFunctionThing(dimension, offset, flag1, flag2, mat1, mat2, matrix_2x2);
     }
     
 }
@@ -350,7 +342,6 @@ public:
     void setDims(){
         printf("Enter dimension\n");
         scanf("%d", &dimension);
-        
     }
     void setCap(){
         printf("Enter cap\n");
@@ -359,7 +350,6 @@ public:
     void setMix(){
         printf("Enter mix (0 to 10)\n");
         scanf("%d", &mix);
-
     }
     
     //output data

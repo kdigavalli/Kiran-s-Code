@@ -21,12 +21,15 @@ int main(){
     //initialize dimension variable
     int N = 0;
     
+    //initialize offset
+    int offset = 0;
+    
     //initialize flags
     bool flag1 = false;
     bool flag2 = false;
-    bool flag3 = false;
-    bool flag4 = false;
-    bool flag5 = false;
+    //bool flag3 = false;
+    //bool flag4 = false;
+    //bool flag5 = false;
     bool flag6 = false;
     char intFlag = 'N';
     
@@ -66,9 +69,8 @@ int main(){
         matrix2[i] = new double[N];
     }
     
-    //initialize 2x2 arrays
+    //initialize 2x2 array
     double matrix_2x2[2][2];
-    double mirror_2x2[2][2];
     
     //read, check & copy data
     readData_NxN(N, matrix1);
@@ -76,18 +78,23 @@ int main(){
     copyF_NxN(N, matrix1, matrix2);
     
     //first analysis function call
-    analyzeF_NxN(N, flag2, matrix1, matrix2);
+    analyzeF_NxN(N, offset, flag2, matrix1, matrix2);
     
     //recursive function call
-    arrayFunctionThing(N, flag1, flag2, matrix1, matrix2, matrix_2x2);
+    arrayFunctionThing(N, offset, flag1, flag2, matrix1, matrix2, matrix_2x2);
     
-    //2x2 analysis function call
-    copyF_2x2(matrix_2x2, mirror_2x2);
-    analyzeF_2x2(flag3, flag4, flag5, matrix_2x2, mirror_2x2);
-    absRow_2x2(1, matrix_2x2);
-    checkData_2x2(matrix_2x2);
+    //sort out last row
+    scalM_NxN(N, 0, 1/matrix1[N-1][N-1], N-1, matrix1);
+    //negativeZeroCheck(N, matrix1);
+    copyF_NxN(N, matrix1, matrix2);
     
-
+    //final set precision
+    decimalCheck(N, matrix1);
+    
+    cout << "\nFinal result:" <<endl;
+    checkData_NxN(N, matrix1);
+    
+    
     
     return 0;
 }
