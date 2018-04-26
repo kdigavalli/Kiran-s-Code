@@ -19,9 +19,20 @@ using namespace std;
 //read data into a 3x3 array
 void readData(double mat1[3][3]){
     
-    cout << "Enter 3x3 integer matrix separated by spaces\n"  <<endl;
+    cout << "\nEnter 3x3 matrix separated by spaces\n"  <<endl;
     for(int i=0; i<=2; i++){
         for(int j=0; j<=2; j++){
+            cin >> mat1[i][j];
+        }
+    }
+}
+
+//read data into a 2x2 array
+void readData_2x2(double mat1[2][2]){
+    
+    cout << "\nEnter 2x2 matrix separated by spaces\n"  <<endl;
+    for(int i=0; i<=1; i++){
+        for(int j=0; j<=1; j++){
             cin >> mat1[i][j];
         }
     }
@@ -442,6 +453,86 @@ double analyzeF_2x2(bool solvedFlag, bool block3Flag, bool linFlag, double matri
     
     
     return 0;
+}
+
+
+void matrix_3x3(){
+    
+    //create 3x3 matrices
+    double matrix [3][3] = {};
+    double matrix2 [3][3] = {};
+    
+    //create 2x2 matrices
+    double matrix3[2][2] = {};
+    double matrix4[2][2] = {};
+    
+    //initialize boolean flags for functions
+    bool flag1 = false;
+    bool flag2 = false;
+    bool flag3 = false;
+    bool flag4 = false;
+    bool flag5 = false;
+    
+    //read in data
+    readData(matrix);
+    
+    //check data
+    cout << "\nEntry:" <<endl;
+    checkData(matrix);
+    
+    //perform computations
+    copyF(matrix, matrix2);
+    
+    analyzeF_3x3(flag1, flag2, matrix, matrix2);
+    
+    copyF(matrix2, matrix);
+    
+    checkData(matrix);
+    
+    subMatrixCopyF(matrix, matrix3);
+    
+    copyF_2x2(matrix3, matrix4);
+    
+    checkData_2x2(matrix3);
+    
+    analyzeF_2x2(flag3, flag4, flag5, matrix3, matrix4);
+    
+    copyF_2x2(matrix3, matrix4);
+    
+    checkData_2x2(matrix3);
+    
+    backIn_CopyF(matrix3, matrix);
+    
+    copyF(matrix, matrix2);
+    
+    //output final result
+    checkData(matrix);
+
+}
+
+
+void matrix_2x2(){
+    
+    //create 2x2 matrices
+    double matrix [2][2] = {};
+    double matrix2 [2][2] = {};
+    
+    bool flag1 = false;
+    bool flag2 = false;
+    bool flag3 = false;
+    
+    //read in data
+    readData_2x2(matrix);
+    
+    //check data
+    cout << "\nEntry:" <<endl;
+    checkData_2x2(matrix);
+    
+    copyF_2x2(matrix, matrix2);
+    
+    analyzeF_2x2(flag1, flag2, flag3, matrix, matrix2);
+    
+    checkData_2x2(matrix);
 }
 
 

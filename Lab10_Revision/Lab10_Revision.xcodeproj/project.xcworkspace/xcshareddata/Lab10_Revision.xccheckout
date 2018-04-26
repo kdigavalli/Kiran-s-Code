@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>F345A5BC-B1CF-4FDC-9FAC-13606F7DB55C</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Lab10_Revision</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>2F0014F7E2F15C927A1144F70E7227B865AA8409</key>
+		<string>https://github.com/kdigavalli/Kiran-s-Code.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Lab10_Revision/Lab10_Revision.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>2F0014F7E2F15C927A1144F70E7227B865AA8409</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/kdigavalli/Kiran-s-Code.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>2F0014F7E2F15C927A1144F70E7227B865AA8409</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>2F0014F7E2F15C927A1144F70E7227B865AA8409</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Kiran-s-Code</string>
+		</dict>
+	</array>
+</dict>
+</plist>

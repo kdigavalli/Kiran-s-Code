@@ -10,35 +10,41 @@
 #include <iomanip>
 #include <cmath>
 #include <cstdlib>
+#include <ctime>
 #include "NewMatrixHeader.h"
 #include "NxN_Header.h"
 
 using namespace std;
 
-
 int main(){
-    
-    //initialize dimension variable
+
+    //initialize dimension variables
     int N = 0;
-    
-    //initialize offset
-    int offset = 0;
+    int M = 0;
     
     //initialize flags
-    bool flag1 = false;
-    bool flag2 = false;
-    //bool flag3 = false;
-    //bool flag4 = false;
-    //bool flag5 = false;
-    bool flag6 = false;
+    char randFlag = 'N';
     char intFlag = 'N';
     
-    //request & receive dimension from user
-    cout << "For an NxN matrix, enter N" <<endl;
+    //request & receive dimensions from user
+    //note: M and N are reversed here to make the program easier to use
+    //conventionally, matrix dimensions are listed as MxN, but this program uses NxM internally
+    cout << "For an MxN matrix, enter M" <<endl;
     cin >> N;
+    cout << "Enter N" <<endl;
+    cin >> M;
+    
+    //error trapping
+    while(N > M){
+        cout << "\nInvalid entry. N must be less than or equal to M" <<endl;
+        cout << "Enter M" <<endl;
+        cin >> N;
+        cout << "Enter N" <<endl;
+        cin >> M;
+    }
     
     //set output precision if non integer entries
-    cout << "Non integer entries? (Y or N)" <<endl;
+    cout << "\nNon integer entries? (Y or N)" <<endl;
     cin >> intFlag;
     cout << "\n";
     
@@ -47,54 +53,34 @@ int main(){
         cout.precision(1);
     }
     
-    //generate random matrix if requested
-    cout << "Would you like a random matrix? (0 or 1)" <<endl;
-    cin >> flag6;
-    
-    if(flag6){
-        randomMatrix newMatrix(N);
-        newMatrix.setCap();
-        newMatrix.setMix();
-        newMatrix.doStuff();
+    //determine whether the user requires a random matrix
+    if(N>3 && M>3){
+        cout << "Would you like a random matrix? (Y or N)" <<endl;
+        cin >> randFlag;
     }
     
-    //initialize dynamic 2D arrays
-    double **matrix1;
-    double **matrix2;
-    matrix1 = new double *[N];
-    matrix2 = new double *[N];
-    
-    for(int i=0; i<N; i++){
-        matrix1[i] = new double[N];
-        matrix2[i] = new double[N];
+    //if matrix is 2x2, old 2x2 analysis methods are used
+    if(N==2 && M==2){
+        matrix_2x2();
+    //if the matrix is 3x3, old 3x3 analysis methods are used
+    } else if(N==3 && M==3){
+        matrix_3x3();
+    //otherwise, we proceed with dynamic arrays and new stuff
+    } else{
+        
+        //create matrix object
+        matrix newMatrix(N, M);
+        
+        //generate random matrix if requested
+        if(randFlag == 'y' || randFlag == 'Y'){
+            newMatrix.setCap();
+            newMatrix.setMix();
+            newMatrix.doStuff();
+        }
+        
+        //perform analysis
+        newMatrix.matrix_NxN(randFlag);
     }
-    
-    //initialize 2x2 array
-    double matrix_2x2[2][2];
-    
-    //read, check & copy data
-    readData_NxN(N, matrix1);
-    checkData_NxN(N, matrix1);
-    copyF_NxN(N, matrix1, matrix2);
-    
-    //first analysis function call
-    analyzeF_NxN(N, offset, flag2, matrix1, matrix2);
-    
-    //recursive function call
-    arrayFunctionThing(N, offset, flag1, flag2, matrix1, matrix2, matrix_2x2);
-    
-    //sort out last row
-    scalM_NxN(N, 0, 1/matrix1[N-1][N-1], N-1, matrix1);
-    //negativeZeroCheck(N, matrix1);
-    copyF_NxN(N, matrix1, matrix2);
-    
-    //final set precision
-    decimalCheck(N, matrix1);
-    
-    cout << "\nFinal result:" <<endl;
-    checkData_NxN(N, matrix1);
-    
-    
     
     return 0;
 }

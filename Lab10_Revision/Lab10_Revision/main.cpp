@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <cmath>
+#include <fstream>
 
 using namespace std;
 
@@ -124,10 +125,25 @@ int main(){
     if(N<=3 && M<=3){
         cout << "\nAnd its determinant is: " << determinant <<endl;
     }
-
     
-    
-    
+    //declare fstream object
+    ofstream File;
+	File.open("TransposeFile");
+	
+    //output results to file
+    File << "The transpose of the matrix you entered is:" <<endl;
+    File << "" <<endl;
+    for(int i=0; i<M; i++){
+        for(int j=0; j<N; j++){
+            File << matrix1[i][j] << " ";
+        }
+        File <<endl;
+    }
+    File << "" <<endl;    File << "Its trace is: " << trace <<endl;
+    if(N<=3 && M<=3){
+        File << "\nAnd its determinant is: " << determinant <<endl;
+    }
+    File.close();
     
     return 0;
 }
