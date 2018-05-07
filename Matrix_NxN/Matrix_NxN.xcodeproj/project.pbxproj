@@ -23,6 +23,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2C134B74209F6BED002A48BB /* TransposeHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TransposeHeader.h; sourceTree = "<group>"; };
 		2CAC696C207A7B7E000F9D09 /* Matrix_NxN */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Matrix_NxN; sourceTree = BUILT_PRODUCTS_DIR; };
 		2CAC696F207A7B7E000F9D09 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		2CAC6976207A7BC8000F9D09 /* NewMatrixHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NewMatrixHeader.h; sourceTree = "<group>"; };
@@ -61,6 +62,7 @@
 			children = (
 				2CAC6976207A7BC8000F9D09 /* NewMatrixHeader.h */,
 				2CAC6977207A90CF000F9D09 /* NxN_Header.h */,
+				2C134B74209F6BED002A48BB /* TransposeHeader.h */,
 				2CAC696F207A7B7E000F9D09 /* main.cpp */,
 			);
 			path = Matrix_NxN;
@@ -236,6 +238,7 @@
 				2CAC6975207A7B7E000F9D09 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -128,7 +128,7 @@ int main(){
     
     //declare fstream object
     ofstream File;
-	File.open("TransposeFile");
+	File.open("TransposeFile.txt");
 	
     //output results to file
     File << "The transpose of the matrix you entered is:" <<endl;

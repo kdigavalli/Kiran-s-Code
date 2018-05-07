@@ -42,7 +42,7 @@ private:
     int randSign;
     int mix;
     
-    //pointers for 2D dynamic matrices
+    //pointers for 2D dynamic arrays
     double **matrix1;
     double **matrix2;
     
@@ -114,6 +114,20 @@ public:
         cout << "" <<endl;
     }
     
+    //display contents of NxM array
+    void checkData_NxN(){
+        
+        cout << "" <<endl;
+        for(int i=0; i<N; i++){
+            for(int j=0; j<M; j++){
+                cout << matrix1[i][j] << " ";
+            }
+            cout <<endl;
+        }
+        cout << "" <<endl;
+    }
+
+    
     //copy the values of mat1 into mat2 for NxM arrays
     void copyF_NxN(int N, int M, double *mat1[N], double *mat2[N]){
         
@@ -139,7 +153,7 @@ public:
     double diagonalSum(int N, int M, double *mat1[N]){
         
         double sum = 0;
-        if(N == M){
+        if(N == M || M == N+1){
             for(int i=0; i<N; i++){
                 sum += mat1[i][i];
             }
@@ -187,6 +201,17 @@ public:
             for(int j=0; j<M; j++){
                 if(mat1[i][j] == -0 || mat1[i][j] == 0){
                     mat1[i][j] = fabs(mat1[i][j]);
+                }
+            }
+        }
+    }
+    
+    //takes absolute values of all zeroes to avoid irritating negative zeros
+    void negativeZeroCheck(){
+        for(int i=0; i<N; i++){
+            for(int j=0; j<M; j++){
+                if(matrix1[i][j] == -0 || matrix1[i][j] == 0){
+                    matrix1[i][j] = fabs(matrix1[i][j]);
                 }
             }
         }
@@ -246,6 +271,25 @@ public:
             for(int j=1; j<N; j++){
                 mat2[i-1][j-1] = mat1[i][j];
             }
+        }
+    }
+    
+    //row reduce to identity matrix if invertible
+    void rref(){
+        if(diagonalSum(N, M, matrix1) == N){
+            for(int i=1; i<N; i++){
+                for(int j=i-1; j>=0; j--){
+                    if(matrix1[i][i] != 0){
+                        replaceF_NxN(N, M, i, -matrix1[j][i], j, i, matrix1, matrix2);
+                    } else{
+                        continue;
+                    }
+                }
+            }
+            copyF_NxN(N, M, matrix1, matrix2);
+            negativeZeroCheck(N, M, matrix1);
+        } else{
+            cout << "\nRREF not possible" <<endl;
         }
     }
     
@@ -350,9 +394,9 @@ public:
             }
             
             //after getting a 1 in the pivot position, we obtain zeros under it
-            if((fabs(matrix1[offset+1][offset]) > 0) && !block6flag){
+            if(!block6flag){
                 for(int d=offset+1; d<N; d++){
-                    if(matrix1[d][offset] != 0 && matrix1[d][offset] != 1){
+                    if(matrix1[d][offset] != 0){
                         cout << "Block 6" <<endl;
                         checkData_NxN(N, M, matrix1);
                         replaceF_NxN(N, M, offset, -matrix1[d][offset], d, offset, matrix1, matrix2);
@@ -440,11 +484,12 @@ public:
         //get rid of negative zeros
         negativeZeroCheck(N, M, matrix1);
         
-        cout << "\nFinal result:" <<endl;
+        cout << "\nResult:" <<endl;
         checkData_NxN(N, M, matrix1);
 
     }
     
+    //-------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------
     
     //functions relating to random matrix generation
