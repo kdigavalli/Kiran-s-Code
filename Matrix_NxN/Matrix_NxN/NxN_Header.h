@@ -91,7 +91,7 @@ public:
     //other functions
     
     //read data into an NxM array
-    void readData_NxN(int N, int M, double *mat1[N]){
+    void readData_NxN(int N, int M, double **mat1){
         
         cout << "\nEnter " << N << "x" << M << " matrix separated by spaces\n"  <<endl;
         for(int i=0; i<N; i++){
@@ -102,7 +102,7 @@ public:
     }
     
     //display contents of NxM array
-    void checkData_NxN(int N, int M, double *mat1[N]){
+    void checkData_NxN(int N, int M, double **mat1){
         
         cout << "" <<endl;
         for(int i=0; i<N; i++){
@@ -129,7 +129,7 @@ public:
 
     
     //copy the values of mat1 into mat2 for NxM arrays
-    void copyF_NxN(int N, int M, double *mat1[N], double *mat2[N]){
+    void copyF_NxN(int N, int M, double **mat1, double **mat2){
         
         for(int i=0; i<N; i++){
             for(int j=0; j<M; j++){
@@ -137,20 +137,8 @@ public:
             }
         }
     }
-    
-    //copy the values of dynamic array mat1 into normal array mat2
-	//no longer useful with latest revisions, but left in for posterity
-    void copyF_dyn(int N, double *mat1[N], double mat2[2][2]){
-        
-        for(int i=0; i<=1; i++){
-            for(int j=0; j<=1; j++){
-                mat2[i][j] = mat1[i][j];
-            }
-        }
-    }
-    
     //returns sum of along the main diagonal of NxN array
-    double diagonalSum(int N, int M, double *mat1[N]){
+    double diagonalSum(int N, int M, double **mat1){
         
         double sum = 0;
         if(N == M || M == N+1){
@@ -164,7 +152,7 @@ public:
     }
     
     //returns sum of all elements of NxN array
-    double matrixSum(int N, int M, double *mat1[N]){
+    double matrixSum(int N, int M, double **mat1){
         
         double sum = 0;
         if(N == M){
@@ -181,7 +169,7 @@ public:
     
     //checks if there are decimal points after the elements of the matrix
     //if so, sets output precision to 1
-    void decimalCheck(int N, int M, double *mat1[N]){
+    void decimalCheck(int N, int M, double **mat1){
         
         double temp = 0;
         for(int i=0; i<N; i++){
@@ -196,7 +184,7 @@ public:
     }
     
     //takes absolute values of all zeroes to avoid irritating negative zeros
-    void negativeZeroCheck(int N, int M, double *mat1[N]){
+    void negativeZeroCheck(int N, int M, double **mat1){
         for(int i=0; i<N; i++){
             for(int j=0; j<M; j++){
                 if(mat1[i][j] == -0 || mat1[i][j] == 0){
@@ -218,7 +206,7 @@ public:
     }
     
     //swaps lines line1 and line2 for NxM arrays
-    void lineSwap_NxN(int N, int M, int offset, int line1, int line2, double *mat1[N], double *mat2[N]){
+    void lineSwap_NxN(int N, int M, int offset, int line1, int line2, double **mat1, double **mat2){
         
         //method to swap lines
         for(int i=0; i<M; i++){
@@ -230,7 +218,7 @@ public:
     }
     
     //gives the scalar multiple of a particular row for NxM matrices
-    double scalM_NxN(int N, int M, int offset, double mult, int row, double *mat1[N]){
+    double scalM_NxN(int N, int M, int offset, double mult, int row, double **mat1){
         
         if(fabs(row)>=N){
             cout << "\nScalM error" <<endl;
@@ -247,7 +235,7 @@ public:
     }
     
     //replaces a row with the sum of itself and the scalar multiple of another row for NxM matrices
-    double replaceF_NxN(int N, int M, int offset, double mult, int replaceRow, int multRow, double *mat1[N], double *mat2[N]){
+    double replaceF_NxN(int N, int M, int offset, double mult, int replaceRow, int multRow, double **mat1, double **mat2){
         
         if(fabs(replaceRow) >= N || fabs(multRow) >= N){
             cout << "\nReplaceF error" <<endl;
@@ -261,17 +249,6 @@ public:
         copyF_NxN(N, M, mat2, mat1);
         checkData_NxN(N, M, mat1);
         return 0;
-    }
-    
-    //copy the lower left submatrix of mat1 into mat2
-	//no longer useful with latest revisions, but left in for posterity
-    void subMatrixCopy_NxN(int N, double *mat1[N], double *mat2[N-1]){
-        
-        for(int i=1; i<N; i++){
-            for(int j=1; j<N; j++){
-                mat2[i-1][j-1] = mat1[i][j];
-            }
-        }
     }
     
     //row reduce to identity matrix if invertible
@@ -295,7 +272,7 @@ public:
     
     // NxM analysis function
 	//note: name is still analyzeF_NxN, but the function works on non-square matrices
-    void analyzeF_NxN(int N, int M, int offset, bool block6flag, double *matrix1[N], double *matrix2[N]){
+    void analyzeF_NxN(int N, int M, int offset, bool block6flag, double **matrix1, double **matrix2){
         
         //sum of all components and sum along the main diagonal
         double fullSum = matrixSum(N, M, matrix1);
@@ -415,7 +392,7 @@ public:
     
     
     //recursive function to analyze the matrix with progressively larger offset
-    void arrayFunctionThing(int N, int M, int offset, bool flag1, bool flag2, double *mat1[N], double *mat2[N]){
+    void arrayFunctionThing(int N, int M, int offset, bool flag1, bool flag2, double **mat1, double **mat2){
         
         //reset flag2 and dimension
         flag2 = false;
@@ -508,7 +485,7 @@ public:
         int posTally = 0;
         int zeroTally = 0;
         int negTally = 0;
-        
+        // 
         for(int i=0; i<N; i++){
             for(int j=0; j<M; j++){
                 if(matrix1[i][j] > 0){
@@ -538,6 +515,7 @@ public:
     }
     
     //actually do stuff
+    // this is a terrible method name
     void doStuff(){
         
         //seed random
