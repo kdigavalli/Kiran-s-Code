@@ -4,10 +4,10 @@
 //
 //  Created by Kiran Digavalli on 8/4/18.
 //  Copyright (c) 2018 Midwest Aerospace Workshop. All rights reserved.
+//
 
-
-#ifndef Matrix_NxN_NxN_Header_h
-#define Matrix_NxN_NxN_Header_h
+#ifndef MATRIX_H
+#define MATRIX_H
 
 #include <iostream>
 #include <stdio.h>
@@ -85,37 +85,24 @@ public:
             matrix1[i] = new double[M];
             matrix2[i] = new double[M];
         }
-
+        
     }
-
+    
     //other functions
     
     //read data into an NxM array
-    void readData_NxN(int N, int M, double **mat1){
+    void readData(void){
         
         cout << "\nEnter " << N << "x" << M << " matrix separated by spaces\n"  <<endl;
         for(int i=0; i<N; i++){
             for(int j=0; j<M; j++){
-                cin >> mat1[i][j];
+                cin >> matrix1[i][j];
             }
         }
     }
     
     //display contents of NxM array
-    void checkData_NxN(int N, int M, double **mat1){
-        
-        cout << "" <<endl;
-        for(int i=0; i<N; i++){
-            for(int j=0; j<M; j++){
-                cout << mat1[i][j] << " ";
-            }
-            cout <<endl;
-        }
-        cout << "" <<endl;
-    }
-    
-    //display contents of NxM array
-    void checkData_NxN(){
+    void display(){
         
         cout << "" <<endl;
         for(int i=0; i<N; i++){
@@ -126,39 +113,45 @@ public:
         }
         cout << "" <<endl;
     }
-
     
-    //copy the values of mat1 into mat2 for NxM arrays
-    void copyF_NxN(int N, int M, double **mat1, double **mat2){
-        
-        for(int i=0; i<N; i++){
-            for(int j=0; j<M; j++){
-                mat2[i][j] = mat1[i][j];
+    // create a copy
+    matrix* copy(){
+        matrix *m = new matrix(M, N);
+        for(int i = 0; i < N; i++){
+            for(int j = 0; j < M; j++){
+                m->matrix1[i][j] = matrix1[i][j];
             }
         }
+        return m;
     }
-    //returns sum of along the main diagonal of NxN array
-    double diagonalSum(int N, int M, double **mat1){
-        
-        double sum = 0;
-        if(N == M || M == N+1){
-            for(int i=0; i<N; i++){
-                sum += mat1[i][i];
-            }
-            return sum;
-        } else {
-            return 0;
+    
+    double trace(){
+        int limit = (N > M) ? M : N;
+        double trace = 0.0;
+        for (int idx = 0; idx < limit; idx++){
+            trace += matrix1[idx][idx];
         }
+        return trace;
+    }
+    
+    double sumOfEntries(){
+        double sum = 0.0;
+        for(int i = 0; i < N; i++){
+            for(int j = 0; j < M; j++){
+                sum += matrix1[i][j];
+            }
+        }
+        return sum;
     }
     
     //returns sum of all elements of NxN array
-    double matrixSum(int N, int M, double **mat1){
-        
+    double matrixSum(){
+        // only for square matrices
         double sum = 0;
         if(N == M){
             for(int i=0; i<N; i++){
                 for(int j=0; j<M; j++){
-                    sum += mat1[i][j];
+                    sum += matrix1[i][j];
                 }
             }
             return sum;
@@ -169,12 +162,11 @@ public:
     
     //checks if there are decimal points after the elements of the matrix
     //if so, sets output precision to 1
-    void decimalCheck(int N, int M, double **mat1){
-        
+    void decimalCheck(){
         double temp = 0;
         for(int i=0; i<N; i++){
             for(int j=0; j<M; j++){
-                if(modf(mat1[i][j], &temp) != 0 && modf(mat1[i][j], &temp) != -0){
+                if(modf(matrix1[i][j], &temp) != 0 && modf(matrix1[i][j], &temp) != -0){
                     cout.setf(ios::fixed);
                     cout.precision(1);
                     break;
@@ -184,22 +176,11 @@ public:
     }
     
     //takes absolute values of all zeroes to avoid irritating negative zeros
-    void negativeZeroCheck(int N, int M, double **mat1){
-        for(int i=0; i<N; i++){
-            for(int j=0; j<M; j++){
-                if(fabs(mat1[i][j]) < 0.1){
-                    mat1[i][j] = 0;
-                }
-            }
-        }
-    }
-    
-    //takes absolute values of all zeroes to avoid irritating negative zeros
     void negativeZeroCheck(){
         for(int i=0; i<N; i++){
             for(int j=0; j<M; j++){
-                if(fabs(matrix1[i][j]) < 0.1){
-                    matrix1[i][j] = 0;
+                if(matrix1[i][j] == -0 || matrix1[i][j] == 0){
+                    matrix1[i][j] = 0; // stupid negative zero
                 }
             }
         }
@@ -271,12 +252,12 @@ public:
     }
     
     // NxM analysis function
-	//note: name is still analyzeF_NxN, but the function works on non-square matrices
+    //note: name is still analyzeF_NxN, but the function works on non-square matrices
     void analyzeF_NxN(int N, int M, int offset, bool block6flag, double **matrix1, double **matrix2){
         
         //sum of all components and sum along the main diagonal
-        double fullSum = matrixSum(N, M, matrix1);
-        double diaSum = diagonalSum(N, M, matrix1);
+        double fullSum = matrixSum();
+        double diaSum = trace();
         
         //initialize flags
         bool pivot1Flag = false;
@@ -392,6 +373,7 @@ public:
     
     
     //recursive function to analyze the matrix with progressively larger offset
+    // row reduces the matrix
     void arrayFunctionThing(int N, int M, int offset, bool flag1, bool flag2, double **mat1, double **mat2){
         
         //reset flag2 and dimension
@@ -426,7 +408,7 @@ public:
         
         //read data if no random matrix was requested
         if(Flag == 'N' || Flag == 'n'){
-            readData_NxN(N, M, matrix1);
+            readData();
         } else{
             
             //pause to ask the user to continue
@@ -453,17 +435,17 @@ public:
         //sort out last row
         scalM_NxN(N, M, 0, 1/matrix1[N-1][N-1], N-1, matrix1);
         //negativeZeroCheck(N, matrix1);
+        
         copyF_NxN(N, M, matrix1, matrix2);
         
         //final set precision
-        decimalCheck(N, M, matrix1);
+        decimalCheck();
         
         //get rid of negative zeros
-        negativeZeroCheck(N, M, matrix1);
+        negativeZeroCheck();
         
         cout << "\nResult:" <<endl;
-        checkData_NxN(N, M, matrix1);
-
+        display();
     }
     
     //-------------------------------------------------------------------------------------
@@ -485,7 +467,7 @@ public:
         int posTally = 0;
         int zeroTally = 0;
         int negTally = 0;
-        // 
+        //
         for(int i=0; i<N; i++){
             for(int j=0; j<M; j++){
                 if(matrix1[i][j] > 0){
@@ -501,7 +483,7 @@ public:
     }
     
     //populates a 2D dynamic array with random numbers
-    void populate(int N, int M){
+    void populate(){
         for(int i=0; i<N; i++){
             for(int j=0; j<M; j++){
                 randSign = rand() % 10;
@@ -516,19 +498,21 @@ public:
     
     //actually do stuff
     // this is a terrible method name
-    void doStuff(){
+    void makeRandomMatrixAndDoStuff(){
         
         //seed random
         srand(time_t(NULL));
         
         // populate array with random numbers
-        populate(N, M);
+        populate();
         
         //output matrix and tally
-        checkData_NxN(N, M, matrix1);
+        display();
         tallySigns();
     }
-
+    
     
 };
+
+
 #endif

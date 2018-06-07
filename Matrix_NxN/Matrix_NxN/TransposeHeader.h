@@ -86,7 +86,7 @@ public:
         cout << "" <<endl;
     }
     
-    void checkData(int N, double *matrix[N]){
+    void checkData(int N, double **matrix){
         cout << "" <<endl;
         for(int i=0; i<N; i++){
             for(int j=0; j<M; j++){

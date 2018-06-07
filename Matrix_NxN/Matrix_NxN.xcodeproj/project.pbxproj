@@ -27,7 +27,8 @@
 		2CAC696C207A7B7E000F9D09 /* Matrix_NxN */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Matrix_NxN; sourceTree = BUILT_PRODUCTS_DIR; };
 		2CAC696F207A7B7E000F9D09 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		2CAC6976207A7BC8000F9D09 /* NewMatrixHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NewMatrixHeader.h; sourceTree = "<group>"; };
-		2CAC6977207A90CF000F9D09 /* NxN_Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NxN_Header.h; sourceTree = "<group>"; };
+		2CAC6977207A90CF000F9D09 /* matrix.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = matrix.hpp; sourceTree = "<group>"; };
+		2CF121C320C9F72D00054A47 /* NxN_Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NxN_Header.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,7 +62,8 @@
 			isa = PBXGroup;
 			children = (
 				2CAC6976207A7BC8000F9D09 /* NewMatrixHeader.h */,
-				2CAC6977207A90CF000F9D09 /* NxN_Header.h */,
+				2CAC6977207A90CF000F9D09 /* matrix.hpp */,
+				2CF121C320C9F72D00054A47 /* NxN_Header.h */,
 				2C134B74209F6BED002A48BB /* TransposeHeader.h */,
 				2CAC696F207A7B7E000F9D09 /* main.cpp */,
 			);
