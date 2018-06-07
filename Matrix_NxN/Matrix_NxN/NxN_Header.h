@@ -263,17 +263,6 @@ public:
         return 0;
     }
     
-    //copy the lower left submatrix of mat1 into mat2
-	//no longer useful with latest revisions, but left in for posterity
-    void subMatrixCopy_NxN(int N, double *mat1[N], double *mat2[N-1]){
-        
-        for(int i=1; i<N; i++){
-            for(int j=1; j<N; j++){
-                mat2[i-1][j-1] = mat1[i][j];
-            }
-        }
-    }
-    
     //row reduce to identity matrix if invertible
     void rref(){
         if(diagonalSum(N, M, matrix1) == N){
@@ -531,7 +520,7 @@ public:
                 if(randSign > mix){
                     matrix1[i][j] = rand() % (1+randCap);
                 } else {
-                    matrix1[i][j] = -( rand() % (1+randCap));
+                    matrix1[i][j] = -(rand() % (1+randCap));
                 }
             }
         }

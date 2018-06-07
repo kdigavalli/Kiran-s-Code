@@ -16,7 +16,6 @@ using namespace std;
 #ifndef Matrix_NxN_TransposeHeader_h
 #define Matrix_NxN_TransposeHeader_h
 
-
 class transpose{
     
 private:
